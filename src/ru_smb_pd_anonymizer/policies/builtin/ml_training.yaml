@@ -1,0 +1,32 @@
+name: builtin_ml_training
+use_case: ml_training
+description: "Шаблон для ML/LLM: сохраняет распределения, агрессивно обобщает идентификаторы"
+fields:
+  - field_pattern: "semantic:FIO"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: fio.FioSyntheticTransformer
+  - field_pattern: "semantic:Passport"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: passport.PassportSuppressionTransformer
+  - field_pattern: "semantic:INN"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: inn.InnHashingTransformer
+  - field_pattern: "semantic:SNILS"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: snils.SnilsHashingTransformer
+  - field_pattern: "semantic:Phone"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: phone.PhoneMaskingTransformer
+  - field_pattern: "semantic:Email"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: email.EmailMaskingTransformer
+  - field_pattern: "semantic:Address"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: address.AddressGeneralizationTransformer
+    params:
+      mode: city_street
+  - field_pattern: "semantic:CustomID"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: generic_id.GenericIdHashingTransformer
+global_rules:
+  require_irreversible_for_sensitive: true

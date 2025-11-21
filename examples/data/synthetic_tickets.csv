@@ -1,0 +1,4 @@
+ticket_id,user_id,client_email,client_phone,issue_summary,comment
+1001,1,ivanov@example.com,+7 999 123-45-67,Ошибка авторизации,"При входе вижу 500"
+1002,2,petrov@example.com,+7 921 111-22-33,Не приходит SMS,"Заказал код, нет SMS"
+1003,3,anna@example.com,8 800 555-35-35,Вопрос по оплате,"Хочу поменять способ оплаты"

@@ -1,0 +1,23 @@
+name: example_analytics
+use_case: analytics
+description: "Пример политики для аналитики"
+fields:
+  - field_pattern: "semantic:FIO"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: fio.FioMaskingTransformer
+  - field_pattern: "semantic:Passport"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: passport.PassportMaskingTransformer
+    params:
+      keep: 2
+  - field_pattern: "semantic:Phone"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: phone.PhoneTokenizationTransformer
+  - field_pattern: "semantic:Email"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: email.EmailTokenizationTransformer
+  - field_pattern: "semantic:CustomID"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: generic_id.GenericIdHashingTransformer
+global_rules:
+  require_irreversible_for_sensitive: true

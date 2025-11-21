@@ -1,0 +1,34 @@
+name: builtin_logs_minimal
+use_case: logs
+description: "Минимизация в логах: обрезает идентификаторы до безопасного минимума"
+fields:
+  - field_pattern: "semantic:FIO"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: fio.FioMaskingTransformer
+  - field_pattern: "semantic:Passport"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: passport.PassportSuppressionTransformer
+  - field_pattern: "semantic:INN"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: inn.InnHashingTransformer
+  - field_pattern: "semantic:SNILS"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: snils.SnilsHashingTransformer
+  - field_pattern: "semantic:Phone"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: phone.PhoneMaskingTransformer
+    params:
+      keep: 2
+  - field_pattern: "semantic:Email"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: email.EmailMaskingTransformer
+  - field_pattern: "semantic:Address"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: address.AddressGeneralizationTransformer
+    params:
+      mode: region
+  - field_pattern: "semantic:CustomID"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: generic_id.GenericIdHashingTransformer
+global_rules:
+  require_irreversible_for_sensitive: true

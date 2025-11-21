@@ -1,0 +1,21 @@
+name: example_ml_training
+use_case: ml_training
+description: "Пример политики для обучения моделей"
+fields:
+  - field_pattern: "semantic:FIO"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: fio.FioSyntheticTransformer
+  - field_pattern: "semantic:Address"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: address.AddressGeneralizationTransformer
+    params:
+      mode: region
+  - field_pattern: "semantic:Phone"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: phone.PhoneMaskingTransformer
+  - field_pattern: "semantic:Email"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: email.EmailMaskingTransformer
+  - field_pattern: "semantic:CustomID"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: generic_id.GenericIdHashingTransformer

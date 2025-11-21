@@ -1,0 +1,36 @@
+name: builtin_analytics
+use_case: analytics
+description: "Шаблон для аналитики/BI: сохраняет структуру, минимизирует риск реидентификации"
+fields:
+  - field_pattern: "semantic:FIO"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: fio.FioMaskingTransformer
+    params:
+      mask_char: "*"
+  - field_pattern: "semantic:Passport"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: passport.PassportMaskingTransformer
+    params:
+      keep: 2
+  - field_pattern: "semantic:INN"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: inn.InnHashingTransformer
+  - field_pattern: "semantic:SNILS"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: snils.SnilsHashingTransformer
+  - field_pattern: "semantic:Phone"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: phone.PhoneTokenizationTransformer
+  - field_pattern: "semantic:Email"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: email.EmailTokenizationTransformer
+  - field_pattern: "semantic:Address"
+    level: ANONYMIZED_IRREVERSIBLE
+    transformer: address.AddressGeneralizationTransformer
+    params:
+      mode: region
+  - field_pattern: "semantic:CustomID"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: generic_id.GenericIdHashingTransformer
+global_rules:
+  require_irreversible_for_sensitive: true

@@ -1,0 +1,32 @@
+name: builtin_tech_support
+use_case: tech_support
+description: "Шаблон для техподдержки: балансирует пригодность для расследований и минимизацию риска"
+fields:
+  - field_pattern: "semantic:FIO"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: fio.FioTokenizationTransformer
+  - field_pattern: "semantic:Passport"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: passport.PassportTokenizationTransformer
+  - field_pattern: "semantic:INN"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: inn.InnTokenizationTransformer
+  - field_pattern: "semantic:SNILS"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: snils.SnilsTokenizationTransformer
+  - field_pattern: "semantic:Phone"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: phone.PhoneTokenizationTransformer
+  - field_pattern: "semantic:Email"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: email.EmailTokenizationTransformer
+  - field_pattern: "semantic:Address"
+    level: PSEUDONYMIZED_ONE_WAY
+    transformer: address.AddressGeneralizationTransformer
+    params:
+      mode: city_street
+  - field_pattern: "semantic:CustomID"
+    level: PSEUDONYMIZED_REVERSIBLE
+    transformer: generic_id.GenericIdTokenizationTransformer
+global_rules:
+  require_irreversible_for_sensitive: true

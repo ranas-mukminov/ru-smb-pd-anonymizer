@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"": "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project]
+name = "ru-smb-pd-anonymizer"
+version = "0.1.0"
+description = "Anonymization/pseudonymization toolkit for Russian personal data sets"
+readme = "README.md"
+authors = [{name = "run-as-daemon", email = "contact@run-as-daemon.ru"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+dependencies = [
+  "pandas>=1.5",
+  "pydantic>=2.6",
+  "PyYAML>=6.0",
+  "typer>=0.9",
+  "sqlalchemy>=1.4",
+  "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = ["ruff>=0.4", "mypy>=1.8", "yamllint>=1.32", "bandit>=1.7", "pip-audit>=2.7", "safety>=2.3", "pytest>=7.4", "pytest-cov>=4.1", "types-PyYAML"]
+test = ["pytest>=7.4", "pytest-cov>=4.1"]
+
+[project.scripts]
+ru-pd-anon = "ru_smb_pd_anonymizer.cli.main:app"
+
+[tool.setuptools.package-data]
+"ru_smb_pd_anonymizer.policies.builtin" = ["*.yaml"]
+"ru_smb_pd_anonymizer.pipeline" = ["dbt_macros.sql"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = ["E", "F", "W", "B", "I"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = false
+warn_return_any = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_error_codes = true
+mypy_path = ["src"]
+
+[tool.pytest.ini_options]
+minversion = "7.4"
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.yamllint]
+extends = "relaxed"
+
+override = {
+  "line-length": {"max": 120},
+  "truthy": {"allowed-values": ["true", "false", "on", "off"]},
+}
