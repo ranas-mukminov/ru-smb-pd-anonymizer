@@ -1,8 +1,8 @@
 import pandas as pd
 
 from ru_smb_pd_anonymizer.dtypes.detectors import detect_fields
-from ru_smb_pd_anonymizer.policies.model import AnonymizationLevel, FieldPolicy, Policy
 from ru_smb_pd_anonymizer.pipeline.core import apply_policy_to_dataframe
+from ru_smb_pd_anonymizer.policies.model import AnonymizationLevel, FieldPolicy, Policy
 
 
 def test_apply_policy_dataframe():

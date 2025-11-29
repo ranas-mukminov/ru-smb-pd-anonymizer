@@ -6,7 +6,9 @@ from .detectors import detect_fields
 from .models import DatasetSchema, SemanticType
 
 
-def classify_schema(columns: Iterable[str], sample_rows: Optional[list[Mapping[str, object]]] = None) -> DatasetSchema:
+def classify_schema(
+    columns: Iterable[str], sample_rows: Optional[list[Mapping[str, object]]] = None
+) -> DatasetSchema:
     """Lightweight wrapper over detect_fields for clarity."""
     return detect_fields(columns, sample_rows)
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Annotated, Optional
 
 import pandas as pd
 import typer
@@ -11,15 +11,15 @@ from ...dtypes.detectors import detect_fields
 
 
 def inspect_schema_cmd(
-    input: Path = typer.Option(..., "--input", help="Input file"),
-    format: str = typer.Option("csv", "--format", help="Input format: csv|parquet"),
-    out: Optional[Path] = typer.Option(None, "--out", help="Output schema JSON"),
+    input_path: Annotated[Path, typer.Option(..., "--input", help="Input file")],
+    format: Annotated[str, typer.Option("csv", "--format", help="Input format: csv|parquet")],
+    out: Annotated[Optional[Path], typer.Option(None, "--out", help="Output schema JSON")],
 ) -> None:
     fmt = format.lower()
     if fmt == "csv":
-        df = pd.read_csv(input)
+        df = pd.read_csv(input_path)
     elif fmt in {"parquet", "pq"}:
-        df = pd.read_parquet(input)
+        df = pd.read_parquet(input_path)
     else:
         typer.echo("Unsupported format", err=True)
         raise typer.Exit(code=1)

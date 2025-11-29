@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import pandas as pd
 from typing import List
+
+import pandas as pd
 
 
 def load_parquet(path: str) -> pd.DataFrame:

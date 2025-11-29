@@ -4,7 +4,6 @@ from typer.testing import CliRunner
 
 from ru_smb_pd_anonymizer.cli.main import app
 
-
 runner = CliRunner()
 
 

@@ -3,8 +3,8 @@ from __future__ import annotations
 import pandas as pd
 
 from .strategies.hashing import HashingStrategy
-from .strategies.tokenization import InMemoryTokenizer
 from .strategies.masking import mask_tail
+from .strategies.tokenization import InMemoryTokenizer
 
 
 class GenericIdHashingTransformer:
