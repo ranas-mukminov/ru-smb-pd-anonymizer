@@ -3,7 +3,7 @@ requires = ["setuptools>=65", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-package-dir = {"": "src"}
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -59,7 +59,4 @@ addopts = "-q"
 [tool.yamllint]
 extends = "relaxed"
 
-override = {
-  "line-length": {"max": 120},
-  "truthy": {"allowed-values": ["true", "false", "on", "off"]},
-}
+override = {"line-length" = {"max" = 120}, "truthy" = {"allowed-values" = ["true", "false", "on", "off"]}}
