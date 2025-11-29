@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import importlib
-from typing import Dict, Iterable, Iterator, List
+from typing import Dict, Iterable, Iterator
 
 import pandas as pd
 
-from ..dtypes.models import DatasetSchema, FieldInfo, SemanticType
+from ..dtypes.models import DatasetSchema, FieldInfo
 from ..policies.model import FieldPolicy, Policy
 
 
@@ -41,12 +41,16 @@ def _select_policies(schema: DatasetSchema, policy: Policy) -> Dict[str, FieldPo
     return mapping
 
 
-def apply_policy_to_dataframe(df: pd.DataFrame, schema: DatasetSchema, policy: Policy) -> pd.DataFrame:
+def apply_policy_to_dataframe(
+    df: pd.DataFrame, schema: DatasetSchema, policy: Policy
+) -> pd.DataFrame:
     result = df.copy()
     mapping = _select_policies(schema, policy)
 
     for col, fp in mapping.items():
-        transformer = _resolve_transformer(fp.transformer, fp.params or {}) if fp.transformer else None
+        transformer = (
+            _resolve_transformer(fp.transformer, fp.params or {}) if fp.transformer else None
+        )
         if transformer is None:
             continue
         if hasattr(transformer, "fit"):
@@ -55,9 +59,16 @@ def apply_policy_to_dataframe(df: pd.DataFrame, schema: DatasetSchema, policy: P
     return result
 
 
-def apply_policy_stream(records: Iterable[Dict[str, object]], schema: DatasetSchema, policy: Policy) -> Iterator[Dict[str, object]]:
+def apply_policy_stream(
+    records: Iterable[Dict[str, object]],
+    schema: DatasetSchema,
+    policy: Policy,
+) -> Iterator[Dict[str, object]]:
     df = pd.DataFrame(list(records))
     if df.empty:
         return iter([])
     transformed = apply_policy_to_dataframe(df, schema, policy)
-    return (row._asdict() if hasattr(row, "_asdict") else row for row in transformed.to_dict(orient="records"))
+    return (
+        row._asdict() if hasattr(row, "_asdict") else row
+        for row in transformed.to_dict(orient="records")
+    )

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from typing import Iterable, List
+from typing import List
 
 import pandas as pd
 

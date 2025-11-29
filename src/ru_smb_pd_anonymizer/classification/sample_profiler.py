@@ -25,5 +25,9 @@ def profile_dataframe(df: pd.DataFrame, sample_size: int = 5) -> DatasetProfile:
         unique_count = series.nunique(dropna=True)
         null_fraction = float(series.isna().mean())
         samples = series.dropna().astype(str).head(sample_size).tolist()
-        profiles[col] = FieldProfile(unique_count=unique_count, null_fraction=null_fraction, sample_values=samples)
+        profiles[col] = FieldProfile(
+            unique_count=unique_count,
+            null_fraction=null_fraction,
+            sample_values=samples,
+        )
     return DatasetProfile(fields=profiles)

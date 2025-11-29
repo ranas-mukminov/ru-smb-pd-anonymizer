@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Dict, Optional
 
-from ..policies.model import FieldPolicy, Policy, AnonymizationLevel
+from ..policies.model import AnonymizationLevel, FieldPolicy, Policy
 from .base import AIProvider, NoopAIProvider
 
 

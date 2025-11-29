@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import pandas as pd
 from typing import Protocol
+
+import pandas as pd
 
 
 class Transformer(Protocol):

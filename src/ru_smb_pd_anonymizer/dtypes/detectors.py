@@ -67,12 +67,19 @@ def _detect_semantic(name: str, values: List[object]) -> Optional[SemanticType]:
 def _define_risk(semantic: Optional[SemanticType]) -> RiskLevel:
     if semantic in {SemanticType.PASSPORT, SemanticType.INN, SemanticType.SNILS, SemanticType.FIO}:
         return "high"
-    if semantic in {SemanticType.PHONE, SemanticType.EMAIL, SemanticType.ADDRESS, SemanticType.CUSTOM_ID}:
+    if semantic in {
+        SemanticType.PHONE,
+        SemanticType.EMAIL,
+        SemanticType.ADDRESS,
+        SemanticType.CUSTOM_ID,
+    }:
         return "medium"
     return "low"
 
 
-def detect_fields(columns: Iterable[str], sample_rows: Optional[List[Mapping[str, object]]] = None) -> DatasetSchema:
+def detect_fields(
+    columns: Iterable[str], sample_rows: Optional[List[Mapping[str, object]]] = None
+) -> DatasetSchema:
     schema = DatasetSchema()
     col_list = list(columns)
     samples = sample_rows or []
