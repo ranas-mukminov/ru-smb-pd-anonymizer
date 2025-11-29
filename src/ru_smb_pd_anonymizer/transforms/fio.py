@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import pandas as pd
 
-from .base import Transformer
-from .strategies.masking import mask_tail
 from .strategies.tokenization import InMemoryTokenizer
 
 

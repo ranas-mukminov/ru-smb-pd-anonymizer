@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from importlib import resources
 from pathlib import Path
-from typing import Optional
+from typing import Annotated, Optional
 
 import typer
 
@@ -19,9 +19,11 @@ BUILTIN_MAP = {
 
 
 def suggest_policy_cmd(
-    schema: Path = typer.Option(..., "--schema", help="Path to schema JSON"),
-    use_case: str = typer.Option(..., "--use-case", help="analytics|ml_training|tech_support|logs"),
-    out: Optional[Path] = typer.Option(None, "--out", help="Where to write policy YAML"),
+    schema: Annotated[Path, typer.Option(..., "--schema", help="Path to schema JSON")],
+    use_case: Annotated[
+        str, typer.Option(..., "--use-case", help="analytics|ml_training|tech_support|logs")
+    ],
+    out: Annotated[Optional[Path], typer.Option(None, "--out", help="Where to write policy YAML")],
 ) -> None:
     if use_case in BUILTIN_MAP:
         path = resources.files("ru_smb_pd_anonymizer.policies.builtin").joinpath(

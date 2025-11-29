@@ -24,4 +24,11 @@ def anonymize_table(
         df = pd.DataFrame(result.fetchall(), columns=result.keys())
         schema = detect_fields(df.columns, df.head(50).to_dict(orient="records"))
         anonymized = apply_policy_to_dataframe(df, schema, policy)
-        anonymized.to_sql(destination_table, conn, index=False, if_exists="replace", schema=schema_name, chunksize=chunksize)
+        anonymized.to_sql(
+            destination_table,
+            conn,
+            index=False,
+            if_exists="replace",
+            schema=schema_name,
+            chunksize=chunksize,
+        )

@@ -1,4 +1,3 @@
-import pytest
 
 from ru_smb_pd_anonymizer.dtypes.detectors import detect_fields
 from ru_smb_pd_anonymizer.dtypes.models import SemanticType

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib
 from pathlib import Path
+from typing import Annotated
 
 import typer
 
@@ -9,7 +10,7 @@ from ...policies.model import Policy
 
 
 def validate_policy_cmd(
-    policy: Path = typer.Option(..., "--policy", help="Policy YAML"),
+    policy: Annotated[Path, typer.Option(..., "--policy", help="Policy YAML")],
 ) -> None:
     pol = Policy.from_yaml(str(policy))
 

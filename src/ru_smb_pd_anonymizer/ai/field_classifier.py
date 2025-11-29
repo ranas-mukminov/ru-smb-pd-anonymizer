@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Dict, Iterable, Optional
+from typing import Iterable, Optional
 
 from ..dtypes.detectors import detect_fields
 from ..dtypes.models import DatasetSchema
@@ -24,7 +24,6 @@ def suggest_semantics(
     if not allow_external or provider is None or isinstance(provider, NoopAIProvider):
         return schema
 
-    descriptions = {c: "" for c in columns}
     prompt = "Suggest semantic types for columns: " + ", ".join(columns)
     _ = provider.complete(prompt)  # External call is under caller control
     return schema
