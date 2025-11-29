@@ -1,6 +1,8 @@
+---
 name: builtin_logs_minimal
 use_case: logs
-description: "Минимизация в логах: обрезает идентификаторы до безопасного минимума"
+description: >-
+  Минимизация в логах: обрезает идентификаторы до безопасного минимума
 fields:
   - field_pattern: "semantic:FIO"
     level: ANONYMIZED_IRREVERSIBLE

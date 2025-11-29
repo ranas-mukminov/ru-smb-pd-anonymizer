@@ -1,6 +1,8 @@
+---
 name: builtin_analytics
 use_case: analytics
-description: "Шаблон для аналитики/BI: сохраняет структуру, минимизирует риск реидентификации"
+description: >-
+  Шаблон для аналитики/BI: сохраняет структуру, минимизирует риск реидентификации
 fields:
   - field_pattern: "semantic:FIO"
     level: ANONYMIZED_IRREVERSIBLE

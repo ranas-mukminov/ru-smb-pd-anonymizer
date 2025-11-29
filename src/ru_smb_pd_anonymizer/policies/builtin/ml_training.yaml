@@ -1,6 +1,8 @@
+---
 name: builtin_ml_training
 use_case: ml_training
-description: "Шаблон для ML/LLM: сохраняет распределения, агрессивно обобщает идентификаторы"
+description: >-
+  Шаблон для ML/LLM: сохраняет распределения, агрессивно обобщает идентификаторы
 fields:
   - field_pattern: "semantic:FIO"
     level: ANONYMIZED_IRREVERSIBLE
