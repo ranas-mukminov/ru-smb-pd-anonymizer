@@ -1,6 +1,8 @@
+---
 name: builtin_tech_support
 use_case: tech_support
-description: "Шаблон для техподдержки: балансирует пригодность для расследований и минимизацию риска"
+description: >-
+  Шаблон для техподдержки: балансирует пригодность для расследований и минимизацию риска
 fields:
   - field_pattern: "semantic:FIO"
     level: PSEUDONYMIZED_REVERSIBLE

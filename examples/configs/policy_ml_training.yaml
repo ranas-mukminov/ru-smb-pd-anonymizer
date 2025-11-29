@@ -1,6 +1,8 @@
+---
 name: example_ml_training
 use_case: ml_training
-description: "Пример политики для обучения моделей"
+description: >-
+  Пример политики для обучения моделей
 fields:
   - field_pattern: "semantic:FIO"
     level: ANONYMIZED_IRREVERSIBLE

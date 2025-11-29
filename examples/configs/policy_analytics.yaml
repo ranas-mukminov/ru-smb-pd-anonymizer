@@ -1,6 +1,8 @@
+---
 name: example_analytics
 use_case: analytics
-description: "Пример политики для аналитики"
+description: >-
+  Пример политики для аналитики
 fields:
   - field_pattern: "semantic:FIO"
     level: ANONYMIZED_IRREVERSIBLE

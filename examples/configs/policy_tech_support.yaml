@@ -1,6 +1,8 @@
+---
 name: example_tech_support
 use_case: tech_support
-description: "Пример политики для поддержки"
+description: >-
+  Пример политики для поддержки
 fields:
   - field_pattern: "semantic:FIO"
     level: PSEUDONYMIZED_REVERSIBLE
