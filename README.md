@@ -156,6 +156,18 @@ ru-pd-anon apply-policy \
   --output examples/data/synthetic_crm_anon.csv
 ```
 
+Need a quick win for stakeholders? Add `--report` to show how many rows were processed and which columns were anonymized:
+
+```bash
+ru-pd-anon apply-policy \
+  --input examples/data/synthetic_crm.csv \
+  --format csv \
+  --schema schema.json \
+  --policy policy.yaml \
+  --output examples/data/synthetic_crm_anon.csv \
+  --report
+```
+
 **5. Verify the results**
 ```bash
 head examples/data/synthetic_crm_anon.csv

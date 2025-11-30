@@ -1,12 +1,23 @@
 from __future__ import annotations
 
 import importlib
-from typing import Dict, Iterable, Iterator
+from dataclasses import dataclass
+from typing import Dict, Iterable, Iterator, List, Tuple
 
 import pandas as pd
 
 from ..dtypes.models import DatasetSchema, FieldInfo
 from ..policies.model import FieldPolicy, Policy
+
+
+@dataclass
+class PolicyApplicationReport:
+    """Short report about how a policy was applied to a DataFrame."""
+
+    policy_name: str
+    rows_processed: int
+    columns_anonymized: Dict[str, str]
+    columns_skipped: List[str]
 
 
 def _resolve_transformer(name: str, params: Dict) -> object:
@@ -42,20 +53,37 @@ def _select_policies(schema: DatasetSchema, policy: Policy) -> Dict[str, FieldPo
 
 
 def apply_policy_to_dataframe(
-    df: pd.DataFrame, schema: DatasetSchema, policy: Policy
-) -> pd.DataFrame:
+    df: pd.DataFrame, schema: DatasetSchema, policy: Policy, return_report: bool = False
+) -> pd.DataFrame | Tuple[pd.DataFrame, PolicyApplicationReport]:
     result = df.copy()
     mapping = _select_policies(schema, policy)
+
+    applied: Dict[str, str] = {}
+    skipped: set[str] = set()
 
     for col, fp in mapping.items():
         transformer = (
             _resolve_transformer(fp.transformer, fp.params or {}) if fp.transformer else None
         )
         if transformer is None:
+            skipped.add(col)
             continue
         if hasattr(transformer, "fit"):
             transformer.fit(df[col])
         result[col] = transformer.transform(df[col])
+        applied[col] = fp.transformer or transformer.__class__.__name__
+
+    if return_report:
+        # mark columns from schema that were not matched by any policy
+        skipped.update({field.name for field in schema.fields if field.name not in mapping})
+
+        report = PolicyApplicationReport(
+            policy_name=policy.name,
+            rows_processed=len(df),
+            columns_anonymized=applied,
+            columns_skipped=sorted(skipped),
+        )
+        return result, report
     return result
 
 

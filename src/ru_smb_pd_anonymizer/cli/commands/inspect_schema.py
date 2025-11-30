@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Annotated, Optional
 
 import pandas as pd
 import typer
@@ -11,9 +10,9 @@ from ...dtypes.detectors import detect_fields
 
 
 def inspect_schema_cmd(
-    input_path: Annotated[Path, typer.Option(..., "--input", help="Input file")],
-    format: Annotated[str, typer.Option("csv", "--format", help="Input format: csv|parquet")],
-    out: Annotated[Optional[Path], typer.Option(None, "--out", help="Output schema JSON")],
+    input_path: Path = typer.Option(..., "--input", help="Input file"),
+    out: Path | None = typer.Option(None, "--out", "-o", help="Output schema JSON"),
+    format: str = typer.Option("csv", "--format", help="Input format: csv|parquet"),
 ) -> None:
     fmt = format.lower()
     if fmt == "csv":

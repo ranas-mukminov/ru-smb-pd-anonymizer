@@ -156,6 +156,19 @@ ru-pd-anon apply-policy \
   --output examples/data/synthetic_crm_anon.csv
 ```
 
+Хотите быстро показать ценность продукту для продаж или комплаенса? Добавьте флаг `--report`, чтобы получить краткий отчёт о том,
+сколько строк обработано и какие столбцы были анонимизированы:
+
+```bash
+ru-pd-anon apply-policy \
+  --input examples/data/synthetic_crm.csv \
+  --format csv \
+  --schema schema.json \
+  --policy policy.yaml \
+  --output examples/data/synthetic_crm_anon.csv \
+  --report
+```
+
 **5. Проверьте результаты**
 ```bash
 head examples/data/synthetic_crm_anon.csv

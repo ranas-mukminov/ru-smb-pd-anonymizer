@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Optional
 
 import pandas as pd
 import typer
@@ -12,11 +12,14 @@ from ...policies.model import Policy
 
 
 def apply_policy_cmd(
-    input_path: Annotated[Path, typer.Option(..., "--input", help="Input dataset")],
-    format: Annotated[str, typer.Option("csv", "--format", help="csv|parquet")],
-    schema: Annotated[Optional[Path], typer.Option(None, "--schema", help="Schema JSON")],
-    policy: Annotated[Path, typer.Option(..., "--policy", help="Policy YAML")],
-    output: Annotated[Path, typer.Option(..., "--output", help="Output dataset")],
+    input_path: Path = typer.Option(..., "--input", help="Input dataset"),
+    policy: Path = typer.Option(..., "--policy", help="Policy YAML"),
+    output: Path = typer.Option(..., "--output", help="Output dataset"),
+    schema: Optional[Path] = typer.Option(None, "--schema", help="Schema JSON"),
+    format: str = typer.Option("csv", "--format", help="csv|parquet"),
+    report: bool = typer.Option(
+        False, "--report", help="Print a short summary of anonymization for stakeholders"
+    ),
 ) -> None:
     fmt = format.lower()
     if fmt == "csv":
@@ -51,9 +54,26 @@ def apply_policy_cmd(
         ds_schema = detect_fields(df.columns, df.head(50).to_dict(orient="records"))
 
     pol = Policy.from_yaml(str(policy))
-    anonymized = apply_policy_to_dataframe(df, ds_schema, pol)
+    if report:
+        anonymized, summary = apply_policy_to_dataframe(
+            df, ds_schema, pol, return_report=True
+        )
+    else:
+        anonymized = apply_policy_to_dataframe(df, ds_schema, pol)
 
     if fmt == "csv":
         anonymized.to_csv(output, index=False)
     else:
         anonymized.to_parquet(output, index=False)
+
+    if report:
+        typer.echo(f"Политика: {summary.policy_name}")
+        typer.echo(f"Строк обработано: {summary.rows_processed}")
+        if summary.columns_anonymized:
+            typer.echo("Анонимизированные поля:")
+            for col, transformer in summary.columns_anonymized.items():
+                typer.echo(f"  - {col}: {transformer}")
+        if summary.columns_skipped:
+            typer.echo("Поля без трансформации:")
+            for col in summary.columns_skipped:
+                typer.echo(f"  - {col}")
