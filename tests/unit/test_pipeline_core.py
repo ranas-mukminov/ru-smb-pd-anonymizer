@@ -93,3 +93,33 @@ def test_apply_policy_dataframe_report():
     assert report.rows_processed == len(df)
     assert set(report.columns_anonymized) == {"inn", "fio"}
     assert "email" in report.columns_skipped
+
+
+def test_resolve_transformer_accepts_fully_qualified_name():
+    df = pd.DataFrame({"custom_id": ["123", "456"]})
+    schema = DatasetSchema(
+        fields=[
+            FieldInfo(
+                name="custom_id",
+                physical_type="string",
+                semantic_type=SemanticType.CUSTOM_ID,
+                is_personal_data=True,
+            )
+        ]
+    )
+    policy = Policy(
+        name="fullpath",
+        description="",
+        use_case="analytics",
+        fields=[
+            FieldPolicy(
+                field_pattern="semantic:CustomID",
+                level=AnonymizationLevel.PSEUDONYMIZED_ONE_WAY,
+                transformer="ru_smb_pd_anonymizer.transforms.generic_id.GenericIdMaskingTransformer",
+                params={"keep": 1},
+            )
+        ],
+    )
+
+    anonymized = apply_policy_to_dataframe(df, schema, policy)
+    assert anonymized["custom_id"].iloc[0].endswith("3")

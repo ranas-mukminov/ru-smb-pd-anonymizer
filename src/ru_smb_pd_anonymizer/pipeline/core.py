@@ -23,11 +23,19 @@ class PolicyApplicationReport:
 def _resolve_transformer(name: str, params: Dict) -> object:
     if not name:
         raise ValueError("Transformer name is required in policy")
+
+    module_name: str
+    class_name: str | None
+
     if "." in name:
         module_name, class_name = name.rsplit(".", 1)
+        if module_name.startswith("ru_smb_pd_anonymizer.transforms"):
+            module_path = module_name
+        else:
+            module_path = f"ru_smb_pd_anonymizer.transforms.{module_name}"
     else:
-        module_name, class_name = name, None
-    module_path = f"ru_smb_pd_anonymizer.transforms.{module_name}"
+        module_path, class_name = f"ru_smb_pd_anonymizer.transforms.{name}", None
+
     module = importlib.import_module(module_path)
     class_obj = getattr(module, class_name) if class_name else None
     transformer = class_obj(**params) if class_obj else None
