@@ -45,12 +45,25 @@ def _name_matches(name: str, hints: set[str]) -> bool:
 def _detect_semantic(name: str, values: List[object]) -> Optional[SemanticType]:
     str_values = [str(v).strip() for v in values if v is not None]
 
-    if _name_matches(name, PASSPORT_HINTS) or _any_match(str_values, PASSPORT_RE):
-        return SemanticType.PASSPORT
-    if _name_matches(name, INN_HINTS) or _any_match(str_values, INN_RE):
+    has_passport_hint = _name_matches(name, PASSPORT_HINTS)
+    has_inn_hint = _name_matches(name, INN_HINTS)
+    has_snils_hint = _name_matches(name, SNILS_HINTS)
+
+    # Prefer format-based detection to avoid misclassifying fields when names are ambiguous
+    if _any_match(str_values, INN_RE):
         return SemanticType.INN
-    if _name_matches(name, SNILS_HINTS) or _any_match(str_values, SNILS_RE):
+    if _any_match(str_values, PASSPORT_RE):
+        return SemanticType.PASSPORT
+    if _any_match(str_values, SNILS_RE):
         return SemanticType.SNILS
+
+    # When only column hints are available, rely on them as a fallback
+    if has_inn_hint:
+        return SemanticType.INN if not str_values else None
+    if has_passport_hint:
+        return SemanticType.PASSPORT if not str_values else None
+    if has_snils_hint:
+        return SemanticType.SNILS if not str_values else None
     if _name_matches(name, PHONE_HINTS) or _any_match(str_values, PHONE_RE):
         return SemanticType.PHONE
     if _name_matches(name, EMAIL_HINTS) or _any_match(str_values, EMAIL_RE):
