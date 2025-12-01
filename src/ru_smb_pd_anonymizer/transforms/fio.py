@@ -19,7 +19,12 @@ class FioMaskingTransformer:
             if not parts:
                 return text
             surname = parts[0]
-            initials = "".join(p[0].upper() + "." for p in parts[1:])
+            initials_list: list[str] = []
+            for p in parts[1:]:
+                first_char = p[0].upper()
+                ascii_char = first_char.encode("ascii", "ignore").decode() or "I"
+                initials_list.append(f"{ascii_char}.")
+            initials = "".join(initials_list)
             return f"{surname} {initials}".strip()
 
         return series.apply(_mask_fio)
