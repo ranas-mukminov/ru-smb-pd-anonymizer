@@ -13,6 +13,14 @@ def load_jsonl(path: str) -> pd.DataFrame:
 
 
 def load_jsonl_samples(path: str, n: int = 20) -> List[dict]:
+    rows: List[dict] = []
     with open(path, "r", encoding="utf-8") as f:
-        rows = [json.loads(line) for idx, line in enumerate(f) if line.strip() and idx < n]
+        for line in f:
+            if not line.strip():
+                continue
+
+            rows.append(json.loads(line))
+            if len(rows) >= n:
+                break
+
     return rows
