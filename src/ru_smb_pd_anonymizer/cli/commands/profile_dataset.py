@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Annotated
 
 import pandas as pd
 import typer
@@ -12,9 +13,9 @@ from ...dtypes.detectors import detect_fields
 
 
 def profile_dataset_cmd(
-    input_path: Path = typer.Option(..., "--input", help="Input dataset"),
-    out: Path | None = typer.Option(None, "--out", "-o", help="Output JSON"),
-    format: str = typer.Option("csv", "--format", help="csv|parquet"),
+    input_path: Annotated[Path, typer.Option(..., "--input", help="Input dataset")],
+    out: Annotated[Path | None, typer.Option("--out", "-o", help="Output JSON")] = None,
+    format: Annotated[str, typer.Option("--format", help="csv|parquet")] = "csv",
 ) -> None:
     fmt = format.lower()
     if fmt == "csv":
