@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
+from typing import Annotated, Optional
 
 import pandas as pd
 import typer
@@ -12,14 +12,15 @@ from ...policies.model import Policy
 
 
 def apply_policy_cmd(
-    input_path: Path = typer.Option(..., "--input", help="Input dataset"),
-    policy: Path = typer.Option(..., "--policy", help="Policy YAML"),
-    output: Path = typer.Option(..., "--output", help="Output dataset"),
-    schema: Optional[Path] = typer.Option(None, "--schema", help="Schema JSON"),
-    format: str = typer.Option("csv", "--format", help="csv|parquet"),
-    report: bool = typer.Option(
-        False, "--report", help="Print a short summary of anonymization for stakeholders"
-    ),
+    input_path: Annotated[Path, typer.Option(..., "--input", help="Input dataset")],
+    policy: Annotated[Path, typer.Option(..., "--policy", help="Policy YAML")],
+    output: Annotated[Path, typer.Option(..., "--output", help="Output dataset")],
+    schema: Annotated[Optional[Path], typer.Option(None, "--schema", help="Schema JSON")] = None,
+    format: Annotated[str, typer.Option("--format", help="csv|parquet")] = "csv",
+    report: Annotated[
+        bool,
+        typer.Option("--report", help="Print a short summary of anonymization for stakeholders"),
+    ] = False,
 ) -> None:
     fmt = format.lower()
     if fmt == "csv":
