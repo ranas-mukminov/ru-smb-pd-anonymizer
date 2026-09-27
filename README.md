@@ -17,6 +17,8 @@ The framework includes detectors for Russian-specific identifiers (FIO, passport
 
 This is a technical toolkit: legal assessment of anonymization adequacy remains the responsibility of your legal counsel or compliance team.
 
+**Phase-0 public demo path (stub):** see [`DEMO.md`](DEMO.md) — compose one-liner, one API call, fake PD sample (tracks AEGIS Lite epic).
+
 ---
 
 ## Key Features
