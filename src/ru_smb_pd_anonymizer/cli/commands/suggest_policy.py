@@ -36,6 +36,6 @@ def suggest_policy_cmd(
         policy = suggest_policy(use_case=use_case, schema_overview=overview)
 
     if out:
-        policy.to_yaml(out)
+        policy.to_yaml(str(out))
     else:
         typer.echo(json.dumps(policy.to_dict(), ensure_ascii=False, indent=2))

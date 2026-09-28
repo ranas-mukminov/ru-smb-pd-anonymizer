@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterable, Optional
+from typing import Iterable, Mapping, Optional, cast
 
 from ..dtypes.detectors import detect_fields
 from ..dtypes.models import DatasetSchema
@@ -19,7 +19,8 @@ def suggest_semantics(
     caller is responsible for ensuring no raw PII is sent.
     """
 
-    schema = detect_fields(columns, samples)
+    sample_rows = cast(Optional[list[Mapping[str, object]]], samples)
+    schema = detect_fields(columns, sample_rows)
 
     if not allow_external or provider is None or isinstance(provider, NoopAIProvider):
         return schema
