@@ -21,3 +21,4 @@ cache/
 /.idea/
 /.vscode/
 examples/data/*_anon.csv
+.venv/

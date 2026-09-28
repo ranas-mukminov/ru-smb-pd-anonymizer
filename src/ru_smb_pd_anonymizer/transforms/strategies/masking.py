@@ -18,7 +18,8 @@ def mask_email(series: pd.Series, mask_char: str = "*") -> pd.Series:
     def _mask(value: object) -> str:
         text = "" if value is None else str(value)
         if "@" not in text:
-            return mask_tail(pd.Series([text]), keep=3, mask_char=mask_char).iloc[0]
+            masked = mask_tail(pd.Series([text]), keep=3, mask_char=mask_char).iloc[0]
+            return str(masked)
         local, domain = text.split("@", 1)
         if len(local) <= 2:
             masked_local = mask_char * len(local)

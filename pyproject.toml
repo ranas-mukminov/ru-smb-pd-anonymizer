@@ -52,6 +52,11 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 show_error_codes = true
 mypy_path = ["src"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["airflow.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "7.4"
@@ -61,4 +66,6 @@ addopts = "-q"
 [tool.yamllint]
 extends = "relaxed"
 
-override = {"line-length" = {"max" = 120}, "truthy" = {"allowed-values" = ["true", "false", "on", "off"]}}
+[tool.yamllint.rules]
+line-length = { max = 120 }
+truthy = { allowed-values = ["true", "false", "on", "off"] }

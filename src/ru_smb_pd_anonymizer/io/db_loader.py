@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List
+from typing import Any, List, cast
 
 import pandas as pd
 from sqlalchemy import text
@@ -15,6 +15,6 @@ def load_query(engine: Engine, query: str, limit: int | None = None) -> pd.DataF
     return df
 
 
-def load_query_samples(engine: Engine, query: str, n: int = 20) -> List[dict]:
+def load_query_samples(engine: Engine, query: str, n: int = 20) -> List[dict[str, Any]]:
     df = load_query(engine, query, limit=n)
-    return df.to_dict(orient="records")
+    return cast(List[dict[str, Any]], df.to_dict(orient="records"))

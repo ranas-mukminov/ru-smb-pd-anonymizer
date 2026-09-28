@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import importlib
 from dataclasses import dataclass
-from typing import Dict, Iterable, Iterator, List, Tuple
+from typing import Dict, Iterable, Iterator, List, Literal, Protocol, Tuple, cast, overload
 
 import pandas as pd
 
@@ -20,7 +20,11 @@ class PolicyApplicationReport:
     columns_skipped: List[str]
 
 
-def _resolve_transformer(name: str, params: Dict) -> object:
+class _Transformer(Protocol):
+    def transform(self, series: pd.Series) -> pd.Series: ...
+
+
+def _resolve_transformer(name: str, params: Dict) -> _Transformer | None:
     if not name:
         raise ValueError("Transformer name is required in policy")
 
@@ -39,7 +43,7 @@ def _resolve_transformer(name: str, params: Dict) -> object:
     module = importlib.import_module(module_path)
     class_obj = getattr(module, class_name) if class_name else None
     transformer = class_obj(**params) if class_obj else None
-    return transformer
+    return cast(_Transformer | None, transformer)
 
 
 def _match_field(field: FieldInfo, fp: FieldPolicy) -> bool:
@@ -60,8 +64,29 @@ def _select_policies(schema: DatasetSchema, policy: Policy) -> Dict[str, FieldPo
     return mapping
 
 
+@overload
 def apply_policy_to_dataframe(
-    df: pd.DataFrame, schema: DatasetSchema, policy: Policy, return_report: bool = False
+    df: pd.DataFrame,
+    schema: DatasetSchema,
+    policy: Policy,
+    return_report: Literal[False] = False,
+) -> pd.DataFrame: ...
+
+
+@overload
+def apply_policy_to_dataframe(
+    df: pd.DataFrame,
+    schema: DatasetSchema,
+    policy: Policy,
+    return_report: Literal[True],
+) -> Tuple[pd.DataFrame, PolicyApplicationReport]: ...
+
+
+def apply_policy_to_dataframe(
+    df: pd.DataFrame,
+    schema: DatasetSchema,
+    policy: Policy,
+    return_report: bool = False,
 ) -> pd.DataFrame | Tuple[pd.DataFrame, PolicyApplicationReport]:
     result = df.copy()
     mapping = _select_policies(schema, policy)
@@ -76,8 +101,9 @@ def apply_policy_to_dataframe(
         if transformer is None:
             skipped.add(col)
             continue
-        if hasattr(transformer, "fit"):
-            transformer.fit(df[col])
+        fit = getattr(transformer, "fit", None)
+        if callable(fit):
+            fit(df[col])
         result[col] = transformer.transform(df[col])
         applied[col] = fp.transformer or transformer.__class__.__name__
 

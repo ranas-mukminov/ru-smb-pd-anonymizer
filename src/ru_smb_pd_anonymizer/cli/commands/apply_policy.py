@@ -15,7 +15,7 @@ def apply_policy_cmd(
     input_path: Annotated[Path, typer.Option(..., "--input", help="Input dataset")],
     policy: Annotated[Path, typer.Option(..., "--policy", help="Policy YAML")],
     output: Annotated[Path, typer.Option(..., "--output", help="Output dataset")],
-    schema: Annotated[Optional[Path], typer.Option(None, "--schema", help="Schema JSON")] = None,
+    schema: Annotated[Optional[Path], typer.Option("--schema", help="Schema JSON")] = None,
     format: Annotated[str, typer.Option("--format", help="csv|parquet")] = "csv",
     report: Annotated[
         bool,
