@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import os
-
 import pytest
 
 from ru_smb_pd_anonymizer.transforms.strategies.hashing import HashingStrategy
