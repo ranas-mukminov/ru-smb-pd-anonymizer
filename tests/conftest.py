@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -14,3 +15,7 @@ for path in (PROJECT_ROOT, SRC_PATH):
     str_path = str(path)
     if str_path not in sys.path:
         sys.path.insert(0, str_path)
+
+# Builtin hashing policies omit params.salt; provide a non-production test salt so
+# integration flows exercise HashingStrategy without relying on a random default.
+os.environ.setdefault("RU_PD_ANON_HASH_SALT", "test-only-ru-pd-anon-hash-salt")
