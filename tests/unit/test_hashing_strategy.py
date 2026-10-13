@@ -38,3 +38,11 @@ def test_blank_env_salt_fails_closed(monkeypatch):
     monkeypatch.setenv("RU_PD_ANON_HASH_SALT", "   ")
     with pytest.raises(ValueError, match="RU_PD_ANON_HASH_SALT"):
         HashingStrategy()
+
+
+def test_hashing_rejects_weak_algorithm():
+    import pytest
+    from ru_smb_pd_anonymizer.transforms.strategies.hashing import HashingStrategy
+
+    with pytest.raises(ValueError, match="Unsupported hash algorithm"):
+        HashingStrategy(salt="unit-test-salt", algorithm="md5")
